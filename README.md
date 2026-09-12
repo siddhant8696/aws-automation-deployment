@@ -1,1 +1,2 @@
-# aws-automation-deployment
+# Automated AWS deployment pipeline using Terraform, Docker, and GitHub Actions.
+
