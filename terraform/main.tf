@@ -256,3 +256,56 @@ output "alb_dns_name" {
 	value = aws_lb.main.dns_name
   
 }
+
+resource "aws_iam_user" "github_actions" {
+	name = "aws-automation-deployment-github-actions"
+  
+}
+
+resource "aws_iam_user_policy" "github_actions" {
+	name = "aws-automation-deployment-git-actions-policy"
+	user = aws_iam_user.github_actions.name
+
+	policy = jsonencode({
+		Version = "2012-10-17"
+		Statement = [
+			{
+				Effect ="Allow"
+				Action = [
+					"ecr:GetAuthorizationToken",
+					"ecr:BatchCheckLayerAvailability",
+					"ecr:GetDownloadIrlForLayer",
+					"ecr:BatchGetImage",
+					"ecr:PutImage",
+					"ecr:InitiateLayerUpload",
+					"ecr:UploadLayerPart",
+					"ecr:CompleteLayerUpload"
+				]
+			Resource = "*"
+			},
+			{
+				Effect = "Allow"
+				Action = [
+					"ecs:UpdateService",
+					"ecs:DescribeService"
+				]
+				Resource = "*"
+			}
+		]
+})
+  
+}
+
+resource "aws_iam_access_key" "github_actions" {
+  user = aws_iam_user.github_actions.name
+}
+
+output "github_actions_access_key_id" {
+	value = aws_iam_access_key.github_actions.id  
+}
+
+output "github_actions_secret_access_key" {
+	value = aws_iam_access_key.github_actions.secret
+	sensitive = true
+  
+}
