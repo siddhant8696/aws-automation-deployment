@@ -46,3 +46,24 @@ resource "aws_route_table_association" "public" {
 subnet_id = aws_subnet.public.id
 route_table_id = aws_route_table.public.id
 }
+
+resource "aws_subnet" "private" {
+  vpc_id = aws_vpc.main.id
+  cidr_block = "10.0.2.0/24"
+
+  tags = {
+	Name = "aws-automation-deployment-private-subnet"
+  }
+}
+
+resource "aws_ecr_repository" "app"{
+	name="aws-automation-deployment-app"
+
+	tags = {
+	  Name = "aws-automation-deployment-app"
+	}
+}
+
+output "ecr_repository_url"{
+	value = aws_ecr_repository.app.repository_url
+}
