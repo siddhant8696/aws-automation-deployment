@@ -58,7 +58,6 @@ resource "aws_subnet" "private" {
 
 resource "aws_ecr_repository" "app"{
 	name="aws-automation-deployment-app"
-  	force_delete  = true
 
 	tags = {
 	  Name = "aws-automation-deployment-app"
@@ -275,7 +274,7 @@ resource "aws_iam_user_policy" "github_actions" {
 				Action = [
 					"ecr:GetAuthorizationToken",
 					"ecr:BatchCheckLayerAvailability",
-					"ecr:GetDownloadUrlForLayer",
+					"ecr:GetDownloadIrlForLayer",
 					"ecr:BatchGetImage",
 					"ecr:PutImage",
 					"ecr:InitiateLayerUpload",
